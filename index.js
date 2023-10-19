@@ -5,7 +5,7 @@ const app = express();
 const port = process.env.PORT || 5500;
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
-// middleware
+// _middleware
 app.use(cors());
 app.use(express.json());
 
@@ -30,6 +30,28 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
 
+        const foodDB = client.db("foodDB");
+        const brands = foodDB.collection("brands");
+        const products = foodDB.collection("products");
+
+        app.get("/brands", async (req, res) => {
+            const cursor = brands.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
+        app.get("/products", async (req, res) => {
+            const cursor = products.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
+        app.post("/products", async (req, res) => {
+            const newProduct = req.body;
+            const result = await products.insertOne(newProduct);
+            console.log(result);
+            res.json(result);
+        })
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
