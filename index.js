@@ -476,6 +476,25 @@ async function run() {
             res.send(result);
         })
 
+        app.get("/brands/:brandId/products/:productID", async (req, res) => {
+            const brandId = parseInt(req.params.brandId);
+            const productID = parseInt(req.params.productID);
+
+            const brand = await brandProducts.findOne({ _id: brandId });
+
+            if (brand) {
+                const product = brand.products.find(product => product._id === productID);
+
+                if (product) {
+                    res.send(product);
+                } else {
+                    res.status(404).send("Product not found");
+                }
+            } else {
+                res.status(404).send("Brand not found");
+            }
+        })
+
         app.get("/products", async (req, res) => {
             const cursor = products.find();
             const result = await cursor.toArray();
