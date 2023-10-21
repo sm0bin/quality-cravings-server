@@ -6,7 +6,7 @@ const port = process.env.PORT || 5500;
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const ObjectId = require('mongodb').ObjectId;
 
-// _middleware
+// middleware
 app.use(cors());
 app.use(express.json());
 
@@ -35,6 +35,7 @@ async function run() {
         const brandCollection = brandShopDB.collection("brands");
         const productCollection = brandShopDB.collection("products");
         const userCollection = brandShopDB.collection("users");
+        const testimonialCollection = brandShopDB.collection("testimonials");
 
         // Brand CRUD
         app.get("/brands", async (req, res) => {
@@ -81,7 +82,7 @@ async function run() {
             res.send(result);
         })
 
-        app.put("/products/:productId", async (req, res) => {
+        app.put("/products/:productId/edit", async (req, res) => {
             const id = req.params.productId;
             const filter = { _id: new ObjectId(id) };
             const options = { upsert: true };
@@ -89,19 +90,18 @@ async function run() {
             const updateDoc = {
                 $set: {
                     name: updateProduct.name,
-                    image_url: updateProduct.image_url,
-                    brand_name: updateProduct.brand_name,
+                    imageUrl: updateProduct.imageUrl,
+                    brandId: updateProduct.brandId,
+                    brandName: updateProduct.brandName,
                     type: updateProduct.type,
                     price: updateProduct.price,
                     rating: updateProduct.rating,
-                    short_description: updateProduct.short_description,
+                    shortDescription: updateProduct.shortDescription,
                 },
             };
-            const result = await movies.updateOne(filter, updateDoc, options);
+            const result = await productCollection.updateOne(filter, updateDoc, options);
             res.send(result);
         })
-
-
 
         // User CRUD
         app.get("/users", async (req, res) => {
@@ -110,11 +110,39 @@ async function run() {
             res.send(result);
         })
 
+        app.get("/users/:userEmail", async (req, res) => {
+            const userEmail = req.params.userEmail;
+            const query = { email: userEmail };
+            const result = await userCollection.findOne(query);
+            res.send(result);
+        })
+
         app.post("/users", async (req, res) => {
             const newUser = req.body;
             const result = await userCollection.insertOne(newUser);
             console.log(result);
             res.json(result);
+        })
+
+        app.put("/users/:userEmail", async (req, res) => {
+            const userEmail = req.params.userEmail;
+            const { cartItems } = req.body;
+            const filter = { email: userEmail };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    cartItems: cartItems,
+                },
+            };
+            const result = await userCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
+        })
+
+        // Testimonial CRUD
+        app.get("/testimonials", async (req, res) => {
+            const cursor = testimonialCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
         })
 
         // Send a ping to confirm a successful connection
