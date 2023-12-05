@@ -15,7 +15,8 @@ app.get('/', (req, res) => {
 })
 
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.kejy0wy.mongodb.net/?retryWrites=true&w=majority`;
+// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.kejy0wy.mongodb.net/?retryWrites=true&w=majority`;
+const uri = process.env.DB_PATH;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -29,7 +30,7 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        // await client.connect();
+        await client.connect();
 
         const brandShopDB = client.db("ShopDB");
         const brandCollection = brandShopDB.collection("brands");
@@ -157,6 +158,6 @@ async function run() {
 run().catch(console.dir);
 
 
-// app.listen(port, () => {
-    // console.log(`Example app listening on port ${port}`)
-// })
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`)
+})
