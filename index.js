@@ -29,7 +29,7 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
 
         const brandShopDB = client.db("ShopDB");
         const brandCollection = brandShopDB.collection("brands");
@@ -46,7 +46,7 @@ async function run() {
 
         app.get("/brands/:brandId", async (req, res) => {
             const id = parseInt(req.params.brandId);
-            console.log(id);
+            // console.log(id);
             const query = { _id: id };
             const result = await brandCollection.findOne(query);
             res.send(result);
@@ -70,13 +70,13 @@ async function run() {
         app.post("/products", async (req, res) => {
             const newProduct = req.body;
             const result = await productCollection.insertOne(newProduct);
-            console.log(result);
+            // console.log(result);
             res.json(result);
         })
 
         app.get("/products/:productId", async (req, res) => {
             const id = req.params.productId;
-            console.log(id);
+            // console.log(id);
             const query = { _id: new ObjectId(id) };
             const result = await productCollection.findOne(query);
             res.send(result);
@@ -120,7 +120,7 @@ async function run() {
         app.post("/users", async (req, res) => {
             const newUser = req.body;
             const result = await userCollection.insertOne(newUser);
-            console.log(result);
+            // console.log(result);
             res.json(result);
         })
 
@@ -157,6 +157,6 @@ async function run() {
 run().catch(console.dir);
 
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+// app.listen(port, () => {
+    // console.log(`Example app listening on port ${port}`)
+// })
