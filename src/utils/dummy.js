@@ -10,9 +10,6 @@ app.use(cors());
 app.use(express.json());
 
 
-app.get('/', (req, res) => {
-    res.send('Quality Cravings Server Running...')
-})
 
 
 // Connect 
@@ -210,5 +207,10 @@ app.get('/testimonials', async (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+
+app.get('/', (req, res) => {
+    res.send('Quality Cravings Server Running...')
+})
 
 
