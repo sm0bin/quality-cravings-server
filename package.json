@@ -1,7 +1,7 @@
 {
-  "name": "brandshop-server",
+  "name": "quality-cravings",
   "version": "1.2.0",
-  "description": "Express + Mongoose API for Brandshop",
+  "description": "Express + Mongoose API for Quality Cravings",
   "main": "index.js",
   "scripts": {
     "start": "node src/server.js",
