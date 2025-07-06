@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const connectDB = require('./config/db');
 dotenv.config();
 
 const brandRoutes = require('./modules/brand/brand.routes');
@@ -15,11 +14,10 @@ app.use(express.json());
 
 app.get('/', (req, res) => res.send('Quality Cravings Server Running...'));
 
+// Routes
 app.use('/brands', brandRoutes);
 app.use('/products', productRoutes);
 app.use('/users', userRoutes);
 app.use('/testimonials', testimonialRoutes);
-
-connectDB(); // ensure this is safe to call multiple times in serverless context
 
 module.exports = app;
